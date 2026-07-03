@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>群麗漢方 · 科技理肌專屬解析</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 溫和親膚的淺綠/茶綠配色系統 */
+            --bg-base: #F4F7F4;        /* 溫和的米綠色背景 */
+            --primary-green: #8DA894;  /* 鼠尾草綠/茶綠（主視覺、進度條、按鈕） */
+            --dark-green: #3F5243;     /* 深墨綠（標題、強調字，取代純黑） */
+            --text-main: #3E4A40;      /* 柔和深灰綠（閱讀內文） */
+            --text-light: #90A093;     /* 淺灰綠（副標題、輔助文字） */
+            --border-color: #D3E0D6;   /* 淡淡的綠色邊框 */
+            --card-bg: #FFFFFF;        /* 純白卡片，提升對比與乾淨度 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            /* 靜態柔和漸層背景，營造親膚感 */
+            background: linear-gradient(135deg, #F4F7F4 0%, #E8EFE9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Cormorant Garamond', 'Noto Sans TC', serif;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            /* 輕柔的淺綠色陰影，讓卡片有浮出感但不顯生硬 */
+            box-shadow: 0 20px 50px rgba(63, 82, 67, 0.08);
+            max-width: 640px;
+            width: 100%;
+            padding: 60px 50px;
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-green);
+            margin: 20px auto 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark-green);
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: #E8EFE9;
+            margin-bottom: 40px;
+            position: relative;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-green);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-number {
+            color: var(--primary-green);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-style: italic;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 40px;
+            font-weight: 500;
+            line-height: 1.6;
+            text-align: center;
+            color: var(--dark-green);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            background: #FAFCFA;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary-green);
+            background: #F2F7F3;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .custom-radio {
+            width: 14px;
+            height: 14px;
+            border: 1px solid var(--text-light);
+            border-radius: 50%;
+            margin-right: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .option.selected .custom-radio {
+            border-color: var(--primary-green);
+        }
+
+        .option.selected .custom-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex-grow: 1;
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--text-main);
+        }
+
+        .option.selected {
+            border-color: var(--primary-green);
+            background: rgba(141, 168, 148, 0.08);
+            font-weight: 500;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 16px 40px;
+            border: 1px solid var(--primary-green);
+            background: transparent;
+            color: var(--primary-green);
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans TC', sans-serif;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: var(--primary-green);
+            color: #FFF;
+        }
+
+        .btn-back {
+            border-color: transparent;
+            color: var(--text-light);
+        }
+        
+        .btn-back:hover {
+            background: #F4F7F4;
+            color: var(--dark-green);
+        }
+
+        .hidden { display: none !important; }
+
+        /* 結果頁面樣式 */
+        .result-container {
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-subtitle {
+            color: var(--primary-green);
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .result-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+
+        .result-description {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            text-align: justify;
+            font-weight: 400;
+        }
+
+        .prescription-box {
+            background: #F9FCFA;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 35px 30px;
+            margin-bottom: 40px;
+            text-align: left;
+            position: relative;
+        }
+
+        .prescription-title {
+            font-size: 16px;
+            color: var(--dark-green);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .prescription-list {
+            list-style: none;
+        }
+
+        .prescription-list li {
+            font-size: 14.5px;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 24px;
+            font-weight: 400;
+        }
+
+        .prescription-list li::before {
+            content: '🌿'; /* 改為草本意象的葉子符號 */
+            position: absolute;
+            left: 0;
+            font-size: 12px;
+            top: 2px;
+            opacity: 0.8;
+        }
+
+        .cta-btn {
+            background: var(--primary-green);
+            color: #FFF;
+            width: 100%;
+            margin-bottom: 15px;
+            border: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 18px 40px;
+            box-shadow: 0 4px 15px rgba(141, 168, 148, 0.3);
+        }
+
+        .cta-btn:hover {
+            background: var(--dark-green);
+            box-shadow: 0 6px 20px rgba(63, 82, 67, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 40px 25px; }
+            h1 { font-size: 24px; }
+            .prescription-box { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 測試頁面 -->
+        <div id="testPage">
+            <div class="header">
+                <div class="subtitle">Chiun Li Botanical Science</div>
+                <h1>漢方科技 · 專屬膚況解析</h1>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-number serif" id="questionNumber"></div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-back hidden" id="btnBack" onclick="previousQuestion()">返回上一題</button>
+            </div>
+        </div>
+
+        <!-- 結果頁面 -->
+        <div id="resultPage" class="hidden">
+            <div class="result-container">
+                <div class="result-subtitle serif">Exclusive Prescription</div>
+                <div class="result-title serif" id="skinTypeResult"></div>
+                <div class="result-description" id="skinTypeDescription"></div>
+
+                <div class="prescription-box">
+                    <div class="prescription-title">漢方科技 · 專屬理肌對策</div>
+                    <ul class="prescription-list" id="tipsContainer"></ul>
+                </div>
+
+                <!-- 導購與體驗 CTA -->
+                <button class="cta-btn" onclick="alert('連結至群麗漢方官方LINE或預約系統')">「您的專屬肌膚護理」群麗漢方-李惠萍</button>
+                <button class="btn-back" style="width:100%; border:1px solid var(--border-color);" onclick="restartTest()">重新解析</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "早晨洗臉後若未立即擦拭保養品，30分鐘後肌膚的感受是？",
+                options: [
+                    { text: "全臉散發明顯油光，觸感滑膩", value: "oily" },
+                    { text: "感到極度緊繃、乾燥，甚至出現微小脫屑", value: "dry" },
+                    { text: "額頭與鼻翼出油，但臉頰感到緊繃微乾", value: "combination" },
+                    { text: "舒適柔軟，沒有明顯出油或緊繃狀況", value: "normal" }
+                ]
+            },
+            {
+                question: "近距離檢視鏡中的自己，您的毛孔分佈狀態？",
+                options: [
+                    { text: "全臉毛孔較為明顯，偶有阻塞困擾", value: "oily" },
+                    { text: "幾乎看不見毛孔，肌理細緻但容易出現乾紋", value: "dry" },
+                    { text: "僅在 T 字部位（額、鼻、下巴）較為明顯", value: "combination" },
+                    { text: "排列整齊細緻，肌膚呈現自然平滑感", value: "normal" }
+                ]
+            },
+            {
+                question: "完成底妝後，經過半天的時間，妝容的變化通常是？",
+                options: [
+                    { text: "底妝易溶解暗沉，需頻繁使用吸油面紙", value: "oily" },
+                    { text: "眼下或兩頰出現卡粉、乾裂與起皮現象", value: "dry" },
+                    { text: "鼻翼兩側脫妝，但雙頰底妝依然完整", value: "combination" },
+                    { text: "妝容持久服貼，僅呈現自然透亮光澤", value: "normal" }
+                ]
+            },
+            {
+                question: "面對環境變化（如換季、冷氣房），肌膚的耐受度？",
+                options: [
+                    { text: "耐受度高，環境變化對出油量影響不大", value: "oily" },
+                    { text: "極易感到乾燥缺水，需要立即補充潤澤", value: "dry" },
+                    { text: "局部區域會感到不適，需分區調理", value: "combination" },
+                    { text: "容易產生泛紅、刺癢或突發性敏感反應", value: "sensitive" }
+                ]
+            },
+            {
+                question: "目前您最渴望透過科技保養突破的瓶頸是？",
+                options: [
+                    { text: "淨化毛孔、平衡過度分泌的皮脂", value: "oily" },
+                    { text: "深層賦活滋養、撫平乾燥引起的細紋", value: "dry" },
+                    { text: "精準分區調理、重建全臉油水平衡", value: "combination" },
+                    { text: "修護肌膚屏障、穩定脆弱敏感狀態", value: "sensitive" }
+                ]
+            }
+        ];
+
+        const skinTypes = {
+            oily: {
+                name: "清透淨化型膚質",
+                description: "您的肌膚原生防禦力佳，不易產生老化細紋，但活躍的皮脂腺容易造成毛孔負擔。保養重點應著眼於「微生態平衡」，結合漢方草本的清熱特性與現代萃取技術，溫和疏通淨化，喚醒肌膚原生的澄淨透亮。",
+                tips: [
+                    "採用溫和潔顏配方，避免過度清潔破壞表皮皮脂膜",
+                    "導入蘊含漢方植萃（如甘草、黃芩）的精華，輕盈調理無負擔",
+                    "以「水相精華」取代厚重乳霜，達成無油感的高效保濕",
+                    "配合現代科技的細緻噴霧，隨時補充肌膚流失的水分"
+                ]
+            },
+            dry: {
+                name: "凝潤賦活型膚質",
+                description: "您的肌膚紋理細緻，但角質層的天然保濕因子較為缺乏，容易因膠原結構流失而產生乾紋。保養關鍵在於重建肌膚底層的「彈簧床」，透過高科技微分子滲透，將漢方滋養與胜肽精華直送肌底。",
+                tips: [
+                    "晨間建議僅用清水或極溫和的漢方洗顏產品潔淨",
+                    "強烈建議導入【小分子道爾頓膠原蛋白】精華，深層重建肌膚支撐力",
+                    "運用【燕窩胜肽】等頂級賦活成分，修護乾燥引起的細紋與老化",
+                    "封存保養：最後一步務必使用蘊含珍稀草本油脂的修護霜鎖水"
+                ]
+            },
+            combination: {
+                name: "動態平衡型膚質",
+                description: "您的肌膚呈現雙重視角，T字部位充滿活力，雙頰則需細心呵護。透過「精準分區」的漢方科技調理策略，結合維他命B3（菸鹼醯胺）等現代成分，讓全臉回歸完美和諧的光澤狀態。",
+                tips: [
+                    "落實分區保養：T字區著重漢方淨透，U字區強化胜肽深層修護",
+                    "全臉使用分子細小的微導精華打底，促進後續活性成分吸收",
+                    "結合菸鹼醯胺成分，同步改善T字毛孔與兩頰暗沉",
+                    "依據季節彈性調整保養品用量，兩頰厚塗修護霜、T字薄擦"
+                ]
+            },
+            normal: {
+                name: "臻萃完美型膚質",
+                description: "恭喜您！您的肌膚處於極佳的水油平衡狀態，擁有令人羨慕的強健基底。目前的重心在於「積極防禦與凍齡」，透過抗氧化與高階抗老成分，將這份無瑕的青春狀態永遠定格。",
+                tips: [
+                    "維持極簡且高效的日常護理步驟，避免過度堆疊保養品",
+                    "將投資重心放於高階抗老精華（如抗老胜肽、頂級漢方人蔘植萃）",
+                    "嚴格執行日間防禦，阻絕紫外線造成的光老化危機",
+                    "可加入眼部及頸部的局部精緻護理，提升整體年輕感"
+                ]
+            },
+            sensitive: {
+                name: "柔敏修護型膚質",
+                description: "您的肌膚宛如珍貴的絲綢般纖薄，對外界環境感知度極高。此時肌膚屏障正處於脆弱狀態，首要任務是「做減法保養」，透過溫和的漢方舒緩成分與神經醯胺，為肌膚重建堅韌的防禦城牆。",
+                tips: [
+                    "全面簡化程序：溫和清潔 → 漢方修護水 → 舒敏修護霜",
+                    "嚴格避開酒精、人工香精及高濃度酸類煥膚成分",
+                    "選擇添加積雪草、神經醯胺等具有「屏障修護」實證的醫學配方",
+                    "洗臉水溫控制在偏涼的微溫水（約 25-30 度）避免熱刺激"
+                ]
+            }
+        };
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        function initTest() {
+            answers = new Array(questions.length).fill(null);
+            currentQuestion = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion) / questions.length) * 100;
+
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionNumber').textContent = `0${currentQuestion + 1} / 0${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option) => {
+                const isSelected = answers[currentQuestion] === option.value;
+                const optionDiv = document.createElement('div');
+                optionDiv.className = `option ${isSelected ? 'selected' : ''}`;
+                
+                optionDiv.onclick = () => selectOption(option.value, optionDiv);
+
+                optionDiv.innerHTML = `
+                    <div class="custom-radio"></div>
+                    <label>${option.text}</label>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            document.getElementById('btnBack').classList.toggle('hidden', currentQuestion === 0);
+        }
+
+        function selectOption(value, element) {
+            answers[currentQuestion] = value;
+
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+
+            setTimeout(() => {
+                nextQuestion();
+            }, 400);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function calculateSkinType() {
+            const counts = { oily: 0, dry: 0, combination: 0, normal: 0, sensitive: 0 };
+            answers.forEach(answer => {
+                if (answer) counts[answer]++;
+            });
+
+            let maxType = 'normal';
+            let maxCount = 0;
+
+            for (const type in counts) {
+                if (counts[type] > maxCount) {
+                    maxCount = counts[type];
+                    maxType = type;
+                }
+            }
+            return maxType;
+        }
+
+        function showResult() {
+            document.getElementById('progressFill').style.width = '100%';
+            
+            setTimeout(() => {
+                const skinType = calculateSkinType();
+                const result = skinTypes[skinType];
+                
+                document.getElementById('testPage').classList.add('hidden');
+                document.getElementById('resultPage').classList.remove('hidden');
+
+                document.getElementById('skinTypeResult').textContent = result.name;
+                document.getElementById('skinTypeDescription').textContent = result.description;
+
+                const tipsContainer = document.getElementById('tipsContainer');
+                tipsContainer.innerHTML = '';
+                result.tips.forEach(tip => {
+                    const li = document.createElement('li');
+                    li.textContent = tip;
+                    tipsContainer.appendChild(li);
+                });
+            }, 300);
+        }
+
+        function restartTest() {
+            document.getElementById('testPage').classList.remove('hidden');
+            document.getElementById('resultPage').classList.add('hidden');
+            initTest();
+        }
+
+        initTest();
+    </script>
+</body>
+</html>
